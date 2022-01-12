@@ -1,0 +1,11 @@
+{
+  "name": "virongy-emails",
+  "version": "1.0.0",
+  "description": "A package to gather author names and emails from sites related to virology",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Brennan LeSuer",
+  "license": "ISC"
+}
