@@ -1,0 +1,19 @@
+const puppeteer = require('puppeteer');
+
+async function startBrowser() {
+    let browser;
+    try {
+        console.log("Creating browser instance....");
+        browser = await puppeteer.launch({
+            args: ["--disable-setuid-sandbox"],
+            'ignoreHTTPSErrors': true
+        });
+    } catch (err) {
+        console.log("Browser instance failed with error => ", err);
+    }
+    return browser;
+}
+
+module.exports = {
+    startBrowser
+}
