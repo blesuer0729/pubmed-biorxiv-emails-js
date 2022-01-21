@@ -2,6 +2,7 @@ let url = 'https://connect.biorxiv.org/relate/content/181';
 
 async function scrape(browser) {
     let page = await browser.newPage();
+
     console.log(`Navigating to ${url}...`);
     await page.goto(url);
 
@@ -23,6 +24,7 @@ async function openNewArticle(browser, link) {
     try{
         let article = await browser.newPage();
         let authorLink = link+".article-info";
+
         console.log("opening " + authorLink + "...")
         await article.goto(authorLink);
 
@@ -32,7 +34,7 @@ async function openNewArticle(browser, link) {
         let email = await article.$eval('.em-addr', email => {
             return email.textContent;
         });
-        
+
         let formatEmail = email.replace('{at}', '@');
         console.log(formatEmail);
     } catch(ex) {
