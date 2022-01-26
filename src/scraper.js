@@ -1,10 +1,17 @@
-let url = 'https://connect.biorxiv.org/relate/content/181';
+const { doesNotMatch } = require('assert');
+const fs = require('fs');
+const { format } = require('path');
 
-async function scrape(browser) {
+let url = 'https://connect.biorxiv.org/relate/content/181?page=';
+
+var writeEmails = fs.createWriteStream('biorxiv_emails.txt', {flags: 'w'});
+
+async function scrape(browser, pageNum) {
     let page = await browser.newPage();
 
-    console.log(`Navigating to ${url}...`);
-    await page.goto(url);
+    let tempUrl = url + pageNum;
+    console.log(`Navigating to ${tempUrl} ...`);
+    await page.goto(tempUrl);
 
     // content block that holds all the articles on the page
     await page.waitForSelector('#block-system-main');
@@ -13,33 +20,32 @@ async function scrape(browser) {
     let urls = await page.$$eval('.highwire-cite-metadata-journal > a', links => {
         return links.map(a => a.href)
     });
+
+    for (const link of urls) {
+        try{
+            console.log("scraping " + link)
+            let article = await browser.newPage();
+            let authorLink = link+".article-info";
     
-    urls.forEach(link => {
-        openNewArticle(browser, link);
-    })
-}
+            await article.goto(authorLink);
+    
+            await article.waitForSelector('.pane-content');
+    
+            // get the corresponding author email for the article
+            let email = await article.$eval('.em-addr', email => {
+                return email.textContent;
+            });
+    
+            let formatEmail = email.replace('{at}', '@');
+            writeEmails.write(formatEmail + `\n`);
 
-// open each page for a given article
-async function openNewArticle(browser, link) {
-    try{
-        let article = await browser.newPage();
-        let authorLink = link+".article-info";
-
-        console.log("opening " + authorLink + "...")
-        await article.goto(authorLink);
-
-        await article.waitForSelector('.pane-content');
-
-        // get the corresponding author email for the article
-        let email = await article.$eval('.em-addr', email => {
-            return email.textContent;
-        });
-
-        let formatEmail = email.replace('{at}', '@');
-        console.log(formatEmail);
-    } catch(ex) {
-        console.log(ex);
+            article.close();
+        } catch(ex) {
+            console.log(ex);
+        }
     }
+
+    console.log("done" + `\n`);
 }
 
 module.exports = {
