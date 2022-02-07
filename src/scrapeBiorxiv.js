@@ -3,8 +3,7 @@ const fs = require('fs');
 const { format } = require('path');
 
 let url = 'https://connect.biorxiv.org/relate/content/181?page=';
-
-var writeEmails = fs.createWriteStream('biorxiv_emails.txt', {flags: 'w'});
+var writeEmails = fs.createWriteStream('output/biorxiv-emails.txt', {flags: 'w'});
 
 async function scrape(browser, pageNum) {
     let page = await browser.newPage();
@@ -44,7 +43,6 @@ async function scrape(browser, pageNum) {
             console.log(ex);
         }
     }
-
     console.log("done" + `\n`);
 }
 
