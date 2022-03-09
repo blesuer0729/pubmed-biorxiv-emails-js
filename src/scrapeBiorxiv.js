@@ -2,10 +2,10 @@ const { doesNotMatch } = require('assert');
 const fs = require('fs');
 const { format } = require('path');
 
-let url = 'https://connect.biorxiv.org/relate/content/181?page=';
-var writeEmails = fs.createWriteStream('output/biorxiv-emails.txt', {flags: 'w'});
-
 async function scrape(browser, pageNum) {
+    let url = 'https://connect.biorxiv.org/relate/content/181?page=';
+    let writeEmails = fs.createWriteStream('output/biorxiv-emails.txt', {flags: 'w'});
+    
     let page = await browser.newPage();
 
     let tempUrl = url + pageNum;
@@ -21,22 +21,26 @@ async function scrape(browser, pageNum) {
     });
 
     for (const link of urls) {
-        try{
+        try {
             console.log("scraping " + link)
+
+            // article is the page chromium will open each link in
             let article = await browser.newPage();
             let authorLink = link+".article-info";
-    
+
             await article.goto(authorLink);
-    
             await article.waitForSelector('.pane-content');
-    
-            // get the corresponding author email for the article
+
+            // the element with class .em-addr contains author emails on biorxiv articles
             let email = await article.$eval('.em-addr', email => {
                 return email.textContent;
             });
+            // the element with class .name contains author names on biorxiv articles
+            let name = await article.$eval('.name', name => {
+                return name.textContent;
+            });
     
-            let formatEmail = email.replace('{at}', '@');
-            writeEmails.write(formatEmail + `\n`);
+            writeEmails.write(email.replace('{at}', '@') + ' ' + name + `\n`);
 
             article.close();
         } catch(ex) {
