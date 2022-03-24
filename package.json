@@ -1,5 +1,5 @@
 {
-  "name": "virongy-emails",
+  "name": "virology-emails",
   "version": "1.1.0",
   "description": "A package to gather author names and emails from sites related to virology",
   "main": "index.js",
