@@ -1,16 +1,12 @@
-const browser = require("./browser");
 const scrapeBiorxiv = require("./scrapeBiorxiv");
 const scrapePubmed = require("./scrapePubmed");
 
-const args = process.argv.slice(2);
-let browserObj = browser.startBrowser();
-
-async function scrapeAll(browserObj) {
+async function scrapeAll(browserObj, site, start, stop) {
     let browser;
-    if (args[0] == "biorxiv") {
+    if (site == "biorxiv") {
         try {
             browser = await browserObj;
-            for(i = args[1]; i <= args[2]; i++) {
+            for(i = start; i <= stop; i++) {
                 await scrapeBiorxiv.scrape(browser, i);
             }
         } catch (err) {
@@ -18,10 +14,10 @@ async function scrapeAll(browserObj) {
             browser.close();
         } 
         browser.close();
-    } else if (args[0] == "pubmed"){
+    } else if (site == "pubmed"){
         try {
             browser = await browserObj;
-            for(i = args[1]; i <= args[2]; i++) {
+            for(i = start; i <= stop; i++) {
                 await scrapePubmed.scrape(browser, i);
             }
         } catch (err) {
@@ -35,4 +31,6 @@ async function scrapeAll(browserObj) {
     
 }
 
-scrapeAll(browserObj);
+module.exports = {
+    scrapeAll
+}

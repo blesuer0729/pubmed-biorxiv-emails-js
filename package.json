@@ -2,13 +2,17 @@
   "name": "virology-emails",
   "version": "1.2.0",
   "description": "A package to gather author names and emails from sites related to virology",
-  "main": "index.js",
+  "main": "./src/index.js",
+  "bin":{
+    "virology-emails": "./bin/index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brennan LeSuer",
   "license": "ISC",
   "dependencies": {
+    "prompt": "^1.2.2",
     "puppeteer": "^13.5.1"
   }
 }
