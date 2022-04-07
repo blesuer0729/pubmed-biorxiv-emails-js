@@ -13,6 +13,12 @@ A package that can collect author emails and/or names from sites related to viro
 npm install virology-emails
 ```
 
+Ensure that the program has a directory to write to
+
+```bash
+mkdir output
+```
+
 ```bash
 virology-emails
 ```
