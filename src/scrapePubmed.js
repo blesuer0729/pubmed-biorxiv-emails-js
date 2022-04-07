@@ -4,7 +4,7 @@ const { format } = require('path');
 
 async function scrape(browser, pageNum) {
     let url = 'https://pubmed.ncbi.nlm.nih.gov/?term=covid-19&page=';
-    let writeEmails = fs.createWriteStream('output/pubmed-emails.txt', {flags: 'w'});
+    let writeEmails = fs.createWriteStream('./output/pubmed-emails.txt', {flags: 'w'});
 
     let page = await browser.newPage();
 

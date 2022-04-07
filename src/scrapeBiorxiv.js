@@ -4,7 +4,7 @@ const { format } = require('path');
 
 async function scrape(browser, pageNum) {
     let url = 'https://connect.biorxiv.org/relate/content/181?page=';
-    let writeEmails = fs.createWriteStream('output/biorxiv-emails.txt', {flags: 'w'});
+    let writeEmails = fs.createWriteStream('./output/biorxiv-emails.txt', {flags: 'w'});
     
     let page = await browser.newPage();
 
